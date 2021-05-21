@@ -3,26 +3,35 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/FirstFragment">
-
+    app:startDestination="@id/loginFragment">
     <fragment
-        android:id="@+id/FirstFragment"
-        android:name="ro.pdm.muno_pdm.FirstFragment"
-        android:label="@string/first_fragment_label"
-        tools:layout="@layout/fragment_first">
-
-        <action
-            android:id="@+id/action_FirstFragment_to_SecondFragment"
-            app:destination="@id/SecondFragment" />
-    </fragment>
+        android:id="@+id/searchFragment"
+        android:name="ro.pdm.muno_pdm.search.fragments.SearchFragment"
+        android:label="@string/search_fragment_label"
+        tools:layout="@layout/fragment_search" />
     <fragment
-        android:id="@+id/SecondFragment"
-        android:name="ro.pdm.muno_pdm.SecondFragment"
-        android:label="@string/second_fragment_label"
-        tools:layout="@layout/fragment_second">
-
-        <action
-            android:id="@+id/action_SecondFragment_to_FirstFragment"
-            app:destination="@id/FirstFragment" />
-    </fragment>
+        android:id="@+id/loginFragment"
+        android:name="ro.pdm.muno_pdm.account.fragments.LoginFragment"
+        android:label="@string/login_fragment_label"
+        tools:layout="@layout/fragment_login" />
+    <fragment
+        android:id="@+id/viewProductListFragment"
+        android:name="ro.pdm.muno_pdm.product.fragments.ViewProductListFragment"
+        android:label="@string/view_product_list_fragment_label"
+        tools:layout="@layout/fragment_view_product_list" />
+    <fragment
+        android:id="@+id/createProductFragment"
+        android:name="ro.pdm.muno_pdm.product.fragments.CreateProductFragment"
+        android:label="@string/create_product_fragment_label"
+        tools:layout="@layout/fragment_create_product" />
+    <fragment
+        android:id="@+id/viewAccountFragment"
+        android:name="ro.pdm.muno_pdm.account.fragments.ViewAccountFragment"
+        android:label="@string/view_account_fragment_label"
+        tools:layout="@layout/fragment_view_account" />
+    <fragment
+        android:id="@+id/createAccountFragment"
+        android:name="ro.pdm.muno_pdm.account.fragments.CreateAccountFragment"
+        android:label="@string/create_account_fragment_label"
+        tools:layout="@layout/fragment_create_account" />
 </navigation>

@@ -2,11 +2,21 @@
     <string name="app_name">MUNO_PDM</string>
     <string name="action_settings">Settings</string>
     <!-- Strings used for fragments for navigation -->
-    <string name="first_fragment_label">First Fragment</string>
-    <string name="second_fragment_label">Second Fragment</string>
+    <string name="create_account_fragment_label">Creaza cont</string>
+    <string name="edit_account_fragment_label">Editeaza cont</string>
+    <string name="view_account_fragment_label">Contul meu</string>
+    <string name="login_fragment_label">Login</string>
+    <string name="create_product_fragment_label">Creaza un anunt</string>
+    <string name="edit_product_fragment_label">Editeaza un anunt</string>
+    <string name="view_product_fragment_label">Vizualizeaza un anunt</string>
+    <string name="view_product_list_fragment_label">Anunturile mele</string>
+    <string name="search_fragment_label">Cauta produse</string>
+
     <string name="next">Next</string>
     <string name="previous">Previous</string>
 
-    <string name="hello_first_fragment">Hello first fragment</string>
-    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <!-- ACCOUNT STRINGS -->
+    <string name="email">Email</string>
+    <string name="parola">Parola</string>
+    <string name="login">Login</string>
 </resources>
