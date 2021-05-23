@@ -19,4 +19,7 @@
     <string name="email">Email</string>
     <string name="parola">Parola</string>
     <string name="login">Login</string>
+
+    <!-- SEARCH STRINGS -->
+    <string name="query">Ce produs doriti sa cautati?</string>
 </resources>

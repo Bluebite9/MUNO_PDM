@@ -32,7 +32,7 @@ class HttpService {
             val munoResponse: MunoResponse<T> = MunoResponse()
 
             try {
-                munoResponse.value = Json.decodeFromString(responseBody)
+                munoResponse.value = Json { ignoreUnknownKeys = true }.decodeFromString(responseBody)
             } catch (e: Exception) {
                 println("----------------- GET EXCEPTION -------------------")
                 println(e.localizedMessage)
@@ -64,7 +64,7 @@ class HttpService {
             val munoResponse: MunoResponse<T> = MunoResponse()
 
             try {
-                munoResponse.value = Json.decodeFromString(responseBody)
+                munoResponse.value = Json { ignoreUnknownKeys = true }.decodeFromString(responseBody)
             } catch (e: Exception) {
                 println("----------------- POST EXCEPTION -------------------")
                 println(e.localizedMessage)

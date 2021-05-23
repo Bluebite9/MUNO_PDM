@@ -8,4 +8,5 @@ class Constants {
 
     val accountUrl: String = "$baseUrl/rest/authenticate"
     val userUrl: String = "$baseUrl/rest/users"
+    val productUrl: String = "$baseUrl/rest/product"
 }
