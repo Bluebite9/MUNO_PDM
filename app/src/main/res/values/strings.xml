@@ -17,9 +17,20 @@
 
     <!-- ACCOUNT STRINGS -->
     <string name="email">Email</string>
-    <string name="parola">Parola</string>
+    <string name="password">Parola</string>
+    <string name="firstName">Prenume</string>
+    <string name="lastName">Nume</string>
+    <string name="phone">Telefon</string>
     <string name="login">Login</string>
+    <string name="user">UTILIZATOR</string>
 
     <!-- SEARCH STRINGS -->
     <string name="query">Ce produs doriti sa cautati?</string>
+
+    <!-- PRODUCT STRINGS -->
+    <string name="productName">Denumirea produsului</string>
+    <string name="productDescription">Descrierea</string>
+    <string name="productPrice">Pretul</string>
+    <string name="productUnit">Unitatea de masura</string>
+    <string name="editProduct">Editeaza</string>
 </resources>

@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import ro.pdm.muno_pdm.R
 import ro.pdm.muno_pdm.product.models.Product
@@ -34,8 +35,10 @@ class SearchAdaptor(var productList: List<Product>?) : RecyclerView.Adapter<Sear
 
         holder.itemView.setOnClickListener {
             val bundle = Bundle()
-            bundle.putSerializable("product", product)
-//            it.findNavController().navigate(R.id.detaliiTraseuFragment, bundle)
+            if (product != null) {
+                bundle.putSerializable("productId", product.id)
+            }
+            it.findNavController().navigate(R.id.viewProductFragment, bundle)
         }
     }
 

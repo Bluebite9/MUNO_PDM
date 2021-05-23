@@ -3,6 +3,7 @@ package ro.pdm.muno_pdm.account.service
 import kotlinx.coroutines.Deferred
 import ro.pdm.muno_pdm.account.models.AuthRequest
 import ro.pdm.muno_pdm.account.models.AuthResponse
+import ro.pdm.muno_pdm.account.models.User
 import ro.pdm.muno_pdm.utils.shared.Constants
 import ro.pdm.muno_pdm.utils.http.HttpService
 import ro.pdm.muno_pdm.utils.http.MunoResponse
@@ -17,6 +18,10 @@ class AccountService {
 
     fun login(authRequest: AuthRequest): Deferred<MunoResponse<AuthResponse>> {
         return httpService.post(constants.accountUrl, authRequest)
+    }
+
+    fun getUserById(id: Long, token: String): Deferred<MunoResponse<User>> {
+        return httpService.get(constants.userUrl + "/$id", token)
     }
 
 }

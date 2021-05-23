@@ -9,8 +9,6 @@ import android.widget.Button
 import android.widget.EditText
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.NavGraph
-import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.navigation.NavigationView
 import kotlinx.coroutines.launch
@@ -87,16 +85,17 @@ class LoginFragment : Fragment() {
                     // if not error, save the token and id into a local database for later use then
                     // change the lateral menu and go to search page
                     else {
-                        val munoDatabaseObject = MunoDatabaseObject()
+                        val userIdMunoDatabaseObject = MunoDatabaseObject()
                         // save user id
-                        munoDatabaseObject.key = "id"
-                        munoDatabaseObject.value = munoResponse.value?.user?.id.toString()
-                        SessionService(requireActivity().application).insert(munoDatabaseObject)
+                        userIdMunoDatabaseObject.key = "id"
+                        userIdMunoDatabaseObject.value = munoResponse.value?.user?.id.toString()
+                        SessionService(requireActivity().application).insert(userIdMunoDatabaseObject)
 
                         // save token
-                        munoDatabaseObject.key = "token"
-                        munoDatabaseObject.value = munoResponse.value?.token
-                        SessionService(requireActivity().application).insert(munoDatabaseObject)
+                        val tokenMunoDatabaseObject = MunoDatabaseObject()
+                        tokenMunoDatabaseObject.key = "token"
+                        tokenMunoDatabaseObject.value = munoResponse.value?.token
+                        SessionService(requireActivity().application).insert(tokenMunoDatabaseObject)
 
                         changeNavigationContext()
 

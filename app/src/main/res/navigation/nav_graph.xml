@@ -25,6 +25,16 @@
         android:label="@string/create_product_fragment_label"
         tools:layout="@layout/fragment_create_product" />
     <fragment
+        android:id="@+id/viewProductFragment"
+        android:name="ro.pdm.muno_pdm.product.fragments.ViewProductFragment"
+        android:label="@string/view_product_fragment_label"
+        tools:layout="@layout/fragment_view_product" />
+    <fragment
+        android:id="@+id/editProductFragment"
+        android:name="ro.pdm.muno_pdm.product.fragments.EditProductFragment"
+        android:label="@string/edit_product_fragment_label"
+        tools:layout="@layout/fragment_edit_product" />
+    <fragment
         android:id="@+id/viewAccountFragment"
         android:name="ro.pdm.muno_pdm.account.fragments.ViewAccountFragment"
         android:label="@string/view_account_fragment_label"
