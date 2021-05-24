@@ -34,7 +34,7 @@ class SearchFragment : Fragment() {
         val recyclerView = view.findViewById<RecyclerView>(R.id.searchProductsRecyclerView)
         val queryEt = view.findViewById<EditText>(R.id.queryEt)
 
-        queryEt.setOnKeyListener(View.OnKeyListener { v, keyCode, event ->
+        queryEt.setOnKeyListener(View.OnKeyListener { _, keyCode, event ->
             if (keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_UP) {
 
                 viewLifecycleOwner.lifecycleScope.launch {

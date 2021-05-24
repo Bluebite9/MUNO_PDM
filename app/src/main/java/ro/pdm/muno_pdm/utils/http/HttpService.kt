@@ -74,4 +74,33 @@ class HttpService {
             return@async munoResponse
         }
     }
+
+    inline fun <reified T> put(url: String, body: MunoSerializable, token: String): Deferred<MunoResponse<T>> {
+        return GlobalScope.async {
+            val client = OkHttpClient()
+            val mapper = jacksonObjectMapper()
+            val bodyJson = mapper.writeValueAsString(body)
+            val mediaType = "application/json; charset=utf-8".toMediaType()
+            val jsonBody = bodyJson.toRequestBody(mediaType)
+            val builder = Request.Builder()
+                .url(url)
+                .addHeader("Authorization", "Bearer $token")
+                .put(jsonBody)
+
+            val request = builder.build()
+            val response = client.newCall(request).execute()
+            val responseBody = response.body!!.string()
+            val munoResponse: MunoResponse<T> = MunoResponse()
+
+            try {
+                munoResponse.value = Json { ignoreUnknownKeys = true }.decodeFromString(responseBody)
+            } catch (e: Exception) {
+                println("----------------- PUT EXCEPTION -------------------")
+                println(e.localizedMessage)
+                munoResponse.errorMessage = responseBody
+            }
+
+            return@async munoResponse
+        }
+    }
 }

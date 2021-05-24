@@ -13,4 +13,8 @@ class ProductService {
     fun getProduct(id: Int): Deferred<MunoResponse<Product>> {
         return httpService.get(Constants().productUrl + "/myProduct/$id")
     }
+
+    fun editProduct(product: Product, token: String): Deferred<MunoResponse<Product>> {
+        return httpService.put(Constants().productUrl + "/updateProduct", product, token)
+    }
 }

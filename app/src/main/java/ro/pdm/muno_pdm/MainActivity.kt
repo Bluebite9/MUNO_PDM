@@ -45,7 +45,7 @@ class MainActivity : AppCompatActivity() {
             navController.navigate(R.id.createProductFragment)
         }
 
-        navController.addOnDestinationChangedListener { controller, destination, arguments ->
+        navController.addOnDestinationChangedListener { _, destination, _ ->
 
             if (destination.id == R.id.viewProductListFragment) {
                 fab.show()

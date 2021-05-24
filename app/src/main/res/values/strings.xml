@@ -15,6 +15,11 @@
     <string name="next">Next</string>
     <string name="previous">Previous</string>
 
+    <!-- GENERAL STRINGS -->
+    <string name="save">Salveaza</string>
+    <string name="edit">Editeaza</string>
+    <string name="delete">Sterge</string>
+
     <!-- ACCOUNT STRINGS -->
     <string name="email">Email</string>
     <string name="password">Parola</string>
@@ -32,5 +37,4 @@
     <string name="productDescription">Descrierea</string>
     <string name="productPrice">Pretul</string>
     <string name="productUnit">Unitatea de masura</string>
-    <string name="editProduct">Editeaza</string>
 </resources>
