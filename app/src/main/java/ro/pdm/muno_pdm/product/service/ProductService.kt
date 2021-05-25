@@ -24,4 +24,8 @@ class ProductService {
     fun getMyProducts(userId: String, token: String): Deferred<MunoResponse<List<Product>>> {
         return httpService.get(Constants().productUrl + "/myProducts/$userId", token)
     }
+
+    fun addProduct(product: Product, token: String): Deferred<MunoResponse<Product>> {
+        return httpService.post(Constants().productUrl + "/saveProduct", product, token)
+    }
 }

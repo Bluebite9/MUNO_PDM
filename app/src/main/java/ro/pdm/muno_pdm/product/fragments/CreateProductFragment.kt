@@ -5,30 +5,20 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.EditText
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
+import kotlinx.coroutines.launch
 import ro.pdm.muno_pdm.R
+import ro.pdm.muno_pdm.account.models.User
+import ro.pdm.muno_pdm.product.models.Product
+import ro.pdm.muno_pdm.product.service.ProductService
+import ro.pdm.muno_pdm.utils.session.SessionService
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [CreateProductFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class CreateProductFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    private val productService = ProductService()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,23 +28,37 @@ class CreateProductFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_create_product, container, false)
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment CreateProductFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            CreateProductFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val nameEt = view.findViewById<EditText>(R.id.nameEt)
+        val descriptionEt = view.findViewById<EditText>(R.id.descriptionEt)
+        val priceEt = view.findViewById<EditText>(R.id.priceEt)
+        val unitEt = view.findViewById<EditText>(R.id.unitEt)
+
+        view.findViewById<Button>(R.id.saveBt).setOnClickListener {
+            viewLifecycleOwner.lifecycleScope.launch {
+                val product = Product()
+
+                // TODO validations!!!
+
+                product.name = nameEt.text.toString()
+                product.description = descriptionEt.text.toString()
+                product.price = priceEt.text.toString().toFloat()
+                product.unit = unitEt.text.toString()
+
+                val token =
+                    SessionService(requireActivity().application).get("token").await().value
+                val user = User()
+                user.id = SessionService(requireActivity().application).get("id").await().value?.toInt()
+                product.user = user
+                if (token != null) {
+                    val munoResponse = productService.addProduct(product, token).await()
+                    val bundle = Bundle()
+                    bundle.putSerializable("productId", munoResponse.value?.id)
+                    findNavController().navigate(R.id.viewProductFragment, bundle)
                 }
             }
+        }
     }
 }
