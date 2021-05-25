@@ -28,4 +28,8 @@ class AccountService {
         return httpService.post(constants.userUrl + "/add", user)
     }
 
+    fun editUser(user: User, token: String): Deferred<MunoResponse<Any>> {
+        return httpService.put(constants.userUrl + "/updateUser", user, token)
+    }
+
 }

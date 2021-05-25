@@ -1,34 +1,25 @@
 package ro.pdm.muno_pdm.account.fragments
 
+import android.app.AlertDialog
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.EditText
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
+import kotlinx.coroutines.launch
 import ro.pdm.muno_pdm.R
+import ro.pdm.muno_pdm.account.models.User
+import ro.pdm.muno_pdm.account.service.AccountService
+import ro.pdm.muno_pdm.utils.http.MunoResponse
+import ro.pdm.muno_pdm.utils.session.SessionService
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [EditAccountFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class EditAccountFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    private val accountService = AccountService()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,23 +29,49 @@ class EditAccountFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_edit_account, container, false)
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment EditAccountFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            EditAccountFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val firstNameEt = view.findViewById<EditText>(R.id.firstNameEt)
+        var munoResponse: MunoResponse<User> = MunoResponse()
+        val lastNameEt = view.findViewById<EditText>(R.id.lastNameEt)
+        var userId = 0
+        var token = ""
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            userId =
+                SessionService(requireActivity().application).get("id").await().value?.toInt()!!
+            token =
+                SessionService(requireActivity().application).get("token").await().value!!
+            munoResponse = accountService.getUserById(userId.toLong(), token).await()
+
+            if (munoResponse.errorMessage != null) {
+                AlertDialog.Builder(context).setTitle("Atentie!")
+                    .setMessage(munoResponse.errorMessage)
+                    .setPositiveButton("OK", null)
+                    .create()
+                    .show()
             }
+
+            firstNameEt.text.insert(0, munoResponse.value?.firstName)
+            lastNameEt.text.insert(0, munoResponse.value?.lastName)
+        }
+
+        view.findViewById<Button>(R.id.saveBt).setOnClickListener {
+            viewLifecycleOwner.lifecycleScope.launch {
+                val user = User()
+
+                user.id = userId
+                user.email = munoResponse.value?.email
+                user.password = munoResponse.value?.password
+                user.phone = munoResponse.value?.phone
+                user.role = munoResponse.value?.role
+                user.firstName = firstNameEt.text.toString()
+                user.lastName = lastNameEt.text.toString()
+
+                accountService.editUser(user, token).await()
+                findNavController().popBackStack()
+            }
+        }
     }
 }
