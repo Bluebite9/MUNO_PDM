@@ -40,6 +40,11 @@
         android:label="@string/view_account_fragment_label"
         tools:layout="@layout/fragment_view_account" />
     <fragment
+        android:id="@+id/editAccountFragment"
+        android:name="ro.pdm.muno_pdm.account.fragments.EditAccountFragment"
+        android:label="@string/edit_account_fragment_label"
+        tools:layout="@layout/fragment_edit_account" />
+    <fragment
         android:id="@+id/createAccountFragment"
         android:name="ro.pdm.muno_pdm.account.fragments.CreateAccountFragment"
         android:label="@string/create_account_fragment_label"
