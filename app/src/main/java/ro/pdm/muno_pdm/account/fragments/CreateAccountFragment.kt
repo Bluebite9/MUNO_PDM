@@ -1,34 +1,26 @@
 package ro.pdm.muno_pdm.account.fragments
 
+import android.app.AlertDialog
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.EditText
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
+import com.google.android.material.navigation.NavigationView
+import kotlinx.coroutines.launch
 import ro.pdm.muno_pdm.R
+import ro.pdm.muno_pdm.account.models.User
+import ro.pdm.muno_pdm.account.service.AccountService
+import ro.pdm.muno_pdm.utils.session.MunoDatabaseObject
+import ro.pdm.muno_pdm.utils.session.SessionService
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [CreateAccountFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class CreateAccountFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    private val accountService = AccountService()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,23 +30,85 @@ class CreateAccountFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_create_account, container, false)
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment CreateAccountFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            CreateAccountFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val emailEt: EditText = view.findViewById(R.id.emailEt)
+        val passwordEt: EditText = view.findViewById(R.id.passwordEt)
+        val confirmPasswordEt: EditText = view.findViewById(R.id.confirmPasswordEt)
+        val phoneEt: EditText = view.findViewById(R.id.phoneEt)
+        val firstNameEt: EditText = view.findViewById(R.id.firstNameEt)
+        val lastNameEt: EditText = view.findViewById(R.id.lastNameEt)
+        val registerBt: Button = view.findViewById(R.id.registerBt)
+
+        registerBt.setOnClickListener {
+
+            // TODO validations!!!
+
+            if (emailEt.text != null && emailEt.text.toString().trim() != "" &&
+                passwordEt.text != null && passwordEt.text.toString().trim() != "" &&
+                confirmPasswordEt.text != null && confirmPasswordEt.text.toString().trim() != "" &&
+                phoneEt.text != null && phoneEt.text.toString().trim() != "" &&
+                firstNameEt.text != null && firstNameEt.text.toString().trim() != "" &&
+                lastNameEt.text != null && lastNameEt.text.toString().trim() != ""
+            ) {
+                val user = User()
+                user.email = emailEt.text.toString()
+                user.password = passwordEt.text.toString()
+                user.phone = phoneEt.text.toString()
+                user.firstName = firstNameEt.text.toString()
+                user.lastName = lastNameEt.text.toString()
+
+                viewLifecycleOwner.lifecycleScope.launch {
+                    val munoResponse = accountService.register(user).await()
+
+                    if (munoResponse.errorMessage != null) {
+                        AlertDialog.Builder(context).setTitle("Atentie!")
+                            .setMessage(munoResponse.errorMessage)
+                            .setPositiveButton("OK", null)
+                            .create()
+                            .show()
+
+                        return@launch
+                    }
+
+                    val userIdMunoDatabaseObject = MunoDatabaseObject()
+                    // save user id
+                    userIdMunoDatabaseObject.key = "id"
+                    userIdMunoDatabaseObject.value = munoResponse.value?.user?.id.toString()
+                    SessionService(requireActivity().application).insert(userIdMunoDatabaseObject)
+
+                    println("------------- REGISTER --------------")
+                    println(munoResponse.value?.user?.id)
+                    println(munoResponse.value?.token)
+                    println(munoResponse.errorMessage)
+                    // save token
+                    val tokenMunoDatabaseObject = MunoDatabaseObject()
+                    tokenMunoDatabaseObject.key = "token"
+                    tokenMunoDatabaseObject.value = munoResponse.value?.token
+                    SessionService(requireActivity().application).insert(tokenMunoDatabaseObject)
+
+                    changeNavigationContext()
+
+                    // set the start page & automatically go to it
+                    val inflater = findNavController().navInflater
+                    val graph = inflater.inflate(R.navigation.nav_graph)
+                    graph.startDestination = R.id.searchFragment
+
+                    findNavController().graph = graph
                 }
             }
+        }
+    }
+
+    private fun changeNavigationContext() {
+        val navigationView : NavigationView? = activity?.findViewById(R.id.nav_view)
+        if (navigationView != null) {
+            navigationView.menu.findItem(R.id.createProductFragment).isVisible = true
+            navigationView.menu.findItem(R.id.viewProductListFragment).isVisible = true
+            navigationView.menu.findItem(R.id.viewAccountFragment).isVisible = true
+            navigationView.menu.findItem(R.id.loginFragment).isVisible = false
+            navigationView.menu.findItem(R.id.createAccountFragment).isVisible = false
+        }
     }
 }

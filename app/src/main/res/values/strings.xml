@@ -23,10 +23,12 @@
     <!-- ACCOUNT STRINGS -->
     <string name="email">Email</string>
     <string name="password">Parola</string>
+    <string name="confirmPassword">Confirma parola</string>
     <string name="firstName">Prenume</string>
     <string name="lastName">Nume</string>
     <string name="phone">Telefon</string>
     <string name="login">Login</string>
+    <string name="register">Creaza cont</string>
     <string name="user">UTILIZATOR</string>
 
     <!-- SEARCH STRINGS -->

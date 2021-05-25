@@ -24,4 +24,8 @@ class AccountService {
         return httpService.get(constants.userUrl + "/$id", token)
     }
 
+    fun register(user: User): Deferred<MunoResponse<AuthResponse>> {
+        return httpService.post(constants.userUrl + "/add", user)
+    }
+
 }
