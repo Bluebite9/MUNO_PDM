@@ -255,7 +255,7 @@ class CreateAccountFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun geoLocate() {
-        println("---------- GEOLOCATION ----------")
+        println("---------- GEOLOCATION CREATE ACCOUNT ----------")
 
         val selectedCounty = countySpinner.selectedItem.toString()
         val selectedCity = citySpinner.selectedItem.toString()

@@ -29,6 +29,8 @@
     <string name="phone">Telefon</string>
     <string name="login">Login</string>
     <string name="register">Creaza cont</string>
+    <string name="city">Oras</string>
+    <string name="county">Judet</string>
     <string name="user">UTILIZATOR</string>
 
     <!-- SEARCH STRINGS -->

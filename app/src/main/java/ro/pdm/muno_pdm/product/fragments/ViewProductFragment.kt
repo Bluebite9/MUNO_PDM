@@ -1,6 +1,8 @@
 package ro.pdm.muno_pdm.product.fragments
 
 import android.app.AlertDialog
+import android.location.Address
+import android.location.Geocoder
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -10,6 +12,12 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.MapView
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.LatLngBounds
 import kotlinx.coroutines.launch
 import ro.pdm.muno_pdm.R
 import ro.pdm.muno_pdm.account.models.User
@@ -17,11 +25,15 @@ import ro.pdm.muno_pdm.account.service.AccountService
 import ro.pdm.muno_pdm.product.service.ProductService
 import ro.pdm.muno_pdm.utils.http.MunoResponse
 import ro.pdm.muno_pdm.utils.session.SessionService
+import java.io.IOException
 
-class ViewProductFragment : Fragment() {
+class ViewProductFragment : Fragment(), OnMapReadyCallback {
 
     private val productService = ProductService()
     private val accountService = AccountService()
+
+    private lateinit var mapView: MapView
+    private lateinit var user: User
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -37,6 +49,10 @@ class ViewProductFragment : Fragment() {
         // populate product fields
         val productId = requireArguments()["productId"] as Int
 
+        mapView = view.findViewById(R.id.mapView)
+        mapView.onCreate(savedInstanceState)
+        mapView.getMapAsync(this)
+
         viewLifecycleOwner.lifecycleScope.launch {
             val munoResponse = productService.getProduct(productId).await()
 
@@ -47,6 +63,8 @@ class ViewProductFragment : Fragment() {
                     .create()
                     .show()
             } else {
+                user = munoResponse.value?.user!!
+
                 view.findViewById<TextView>(R.id.productNameTv).text =
                     munoResponse.value?.name ?: ""
                 view.findViewById<TextView>(R.id.productDescriptionTv).text =
@@ -56,13 +74,19 @@ class ViewProductFragment : Fragment() {
                 view.findViewById<TextView>(R.id.productUnitTv).text =
                     munoResponse.value?.unit ?: ""
                 view.findViewById<TextView>(R.id.firstNameTv).text =
-                    munoResponse.value?.user?.firstName ?: ""
+                    user.firstName ?: ""
                 view.findViewById<TextView>(R.id.lastNameTv).text =
-                    munoResponse.value?.user?.lastName ?: ""
+                    user.lastName ?: ""
                 view.findViewById<TextView>(R.id.phoneTv).text =
-                    munoResponse.value?.user?.phone ?: ""
+                    user.phone ?: ""
                 view.findViewById<TextView>(R.id.emailTv).text =
-                    munoResponse.value?.user?.email ?: ""
+                    user.email ?: ""
+                view.findViewById<TextView>(R.id.countyTv).text =
+                    user.county ?: ""
+                view.findViewById<TextView>(R.id.cityTv).text =
+                    user.city ?: ""
+
+                geoLocate()
 
                 // hide edit button if logged user is not the parent user
                 val userId =
@@ -91,6 +115,64 @@ class ViewProductFragment : Fragment() {
                         }
                     }
                 }
+            }
+        }
+    }
+
+    override fun onMapReady(p0: GoogleMap) {
+
+    }
+
+    override fun onStart() {
+        super.onStart()
+        mapView.onStart()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        mapView.onResume()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        mapView.onResume()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        mapView.onStop()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mapView.onDestroy()
+    }
+
+    private fun geoLocate() {
+        println("---------- GEOLOCATION VIEW PRODUCT ----------")
+
+        val county = user.county
+        val city = user.city
+
+        val geocoder = Geocoder(requireActivity())
+        var list: MutableList<Address> = mutableListOf()
+
+        try {
+            list = geocoder.getFromLocationName("$county, $city", 1)
+        } catch (e: IOException) {
+            println(e.message)
+        }
+
+        if (list.size > 0) {
+            val address = list[0]
+            println("geoLocate: found a location: $address")
+
+            val boundsBuilder = LatLngBounds.Builder()
+            val latLng = LatLng(address.latitude, address.longitude)
+            boundsBuilder.include(latLng)
+
+            mapView.getMapAsync {
+                it.animateCamera(CameraUpdateFactory.newLatLngBounds(boundsBuilder.build(), 5))
             }
         }
     }
