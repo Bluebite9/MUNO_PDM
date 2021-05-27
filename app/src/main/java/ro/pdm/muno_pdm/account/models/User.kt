@@ -10,7 +10,7 @@ import ro.pdm.muno_pdm.utils.http.MunoSerializable
  */
 @Keep
 @Serializable
-data class User (
+data class User(
     @SerializedName("id") var id: Int? = null,
     @SerializedName("firstName") var firstName: String? = null,
     @SerializedName("lastName") var lastName: String? = null,
@@ -18,4 +18,6 @@ data class User (
     @SerializedName("phone") var phone: String? = null,
     @SerializedName("password") var password: String? = null,
     @SerializedName("role") var role: String? = null,
+    @SerializedName("county") var county: String? = null,
+    @SerializedName("city") var city: String? = null
 ) : MunoSerializable()
