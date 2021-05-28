@@ -26,7 +26,7 @@ import ro.pdm.muno_pdm.account.service.LocationService
 import ro.pdm.muno_pdm.utils.session.MunoDatabaseObject
 import ro.pdm.muno_pdm.utils.session.SessionService
 import java.io.IOException
-
+import ro.pdm.muno_pdm.utils.shared.Validators
 
 class CreateAccountFragment : Fragment(), OnMapReadyCallback {
 
@@ -164,6 +164,7 @@ class CreateAccountFragment : Fragment(), OnMapReadyCallback {
                 lastNameEt.text != null && lastNameEt.text.toString().trim() != ""
             ) {
                 val user = User()
+                //user is populated
                 user.email = emailEt.text.toString()
                 user.password = passwordEt.text.toString()
                 user.phone = phoneEt.text.toString()
@@ -173,6 +174,19 @@ class CreateAccountFragment : Fragment(), OnMapReadyCallback {
                 user.county = countySpinner.selectedItem.toString()
 
                 viewLifecycleOwner.lifecycleScope.launch {
+                    //user input is validated
+
+                    val munoValidateResoponse = Validators().validateUser(user)
+
+                    if (!munoValidateResoponse.isValid) {
+                        AlertDialog.Builder(context).setTitle("Atentie!")
+                            .setMessage(munoValidateResoponse.message)
+                            .setPositiveButton("OK", null)
+                            .create()
+                            .show()
+
+                        return@launch
+                    }
                     val munoResponse = accountService.register(user).await()
 
                     if (munoResponse.errorMessage != null) {
