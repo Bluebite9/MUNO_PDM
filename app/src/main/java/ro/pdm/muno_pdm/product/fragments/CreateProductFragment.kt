@@ -1,5 +1,6 @@
 package ro.pdm.muno_pdm.product.fragments
 
+import android.app.AlertDialog
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -12,9 +13,10 @@ import androidx.navigation.fragment.findNavController
 import kotlinx.coroutines.launch
 import ro.pdm.muno_pdm.R
 import ro.pdm.muno_pdm.account.models.User
-import ro.pdm.muno_pdm.product.models.Product
 import ro.pdm.muno_pdm.product.service.ProductService
 import ro.pdm.muno_pdm.utils.session.SessionService
+import ro.pdm.muno_pdm.utils.shared.Validators
+import ro.pdm.muno_pdm.product.models.Product
 
 class CreateProductFragment : Fragment() {
 
@@ -47,6 +49,17 @@ class CreateProductFragment : Fragment() {
                 product.price = priceEt.text.toString().toFloat()
                 product.unit = unitEt.text.toString()
 
+                val munoValidateResoponse = Validators().validateProduct(product)
+
+                if (!munoValidateResoponse.isValid) {
+                    AlertDialog.Builder(context).setTitle("Atentie!")
+                        .setMessage(munoValidateResoponse.message)
+                        .setPositiveButton("OK", null)
+                        .create()
+                        .show()
+
+                    return@launch
+                }
                 val token =
                     SessionService(requireActivity().application).get("token").await().value
                 val user = User()
