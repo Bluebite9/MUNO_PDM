@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.navigation.ui.NavigationUI
@@ -11,6 +12,9 @@ import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
+import kotlinx.coroutines.launch
+import ro.pdm.muno_pdm.utils.session.SessionService
+import ro.pdm.muno_pdm.utils.shared.Constants
 
 
 class MainActivity : AppCompatActivity() {
@@ -57,6 +61,16 @@ class MainActivity : AppCompatActivity() {
         navigationView.menu.findItem(R.id.createProductFragment).isVisible = false
         navigationView.menu.findItem(R.id.viewProductListFragment).isVisible = false
         navigationView.menu.findItem(R.id.viewAccountFragment).isVisible = false
+
+        lifecycleScope.launch {
+            val munoDatabaseObject = SessionService(application).get("ip").await()
+
+            if (munoDatabaseObject != null) {
+                if (munoDatabaseObject.value != null) {
+                    Constants.ip = munoDatabaseObject.value!!
+                }
+            }
+        }
     }
 
     override fun onSupportNavigateUp(): Boolean {

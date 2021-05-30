@@ -8,7 +8,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import androidx.navigation.fragment.findNavController
 import ro.pdm.muno_pdm.R
+import ro.pdm.muno_pdm.utils.session.MunoDatabaseObject
+import ro.pdm.muno_pdm.utils.session.SessionService
 import ro.pdm.muno_pdm.utils.shared.Constants
 
 class SettingsFragment : Fragment() {
@@ -28,10 +31,13 @@ class SettingsFragment : Fragment() {
         ipEt.text.insert(0, Constants.ip)
 
         view.findViewById<Button>(R.id.saveBt).setOnClickListener {
-            println("--------- SETTINGS IP CHANGE -----------")
-            println(ipEt.text.toString())
             Constants.ip = ipEt.text.toString()
-            println(ipEt.text.toString())
+            val munoDatabaseObject = MunoDatabaseObject()
+            munoDatabaseObject.key = "ip"
+            munoDatabaseObject.value = Constants.ip
+            SessionService(requireActivity().application).insert(munoDatabaseObject)
+
+            findNavController().popBackStack()
         }
     }
 
