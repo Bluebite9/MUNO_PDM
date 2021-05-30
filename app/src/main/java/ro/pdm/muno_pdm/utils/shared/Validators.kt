@@ -96,12 +96,12 @@ class Validators {
     fun validateProduct(product: Product): MunoValidateResponse {
         val munoValidateResponse = MunoValidateResponse()
 
-        if (!isNameValid(product.name)) {
+        if (product.name == null) {
             munoValidateResponse.message = "Numele este invalid."
             return munoValidateResponse
         }
 
-        if (!isDescriptionValid(product.description)) {
+        if (product.description == null) {
             munoValidateResponse.message = "Descrierea este invalida."
             return munoValidateResponse
         }
@@ -115,10 +115,7 @@ class Validators {
             munoValidateResponse.message = "Tipul de cantitate (Buc/ KG/ L)"
             return munoValidateResponse
         }
-        if (product.category == null) {
-            munoValidateResponse.message = "Introduceti categoria produsului"
-            return munoValidateResponse
-        }
+
         return munoValidateResponse
     }
 }
