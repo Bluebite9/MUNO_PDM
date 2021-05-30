@@ -11,10 +11,10 @@ class LocationService {
     private val httpService = HttpService()
 
     fun getCounties(): Deferred<MunoResponse<List<County>>> {
-        return httpService.get(Constants().countyUrl)
+        return httpService.get(Constants.countyUrl)
     }
 
     fun getCities(countyAuto: String): Deferred<MunoResponse<List<City>>> {
-        return httpService.get(Constants().cityUrl + "/$countyAuto")
+        return httpService.get(Constants.cityUrl + "/$countyAuto")
     }
 }

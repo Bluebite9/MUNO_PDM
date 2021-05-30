@@ -10,7 +10,7 @@ class SearchService {
     private val httpService = HttpService()
 
     fun search(query: String): Deferred<MunoResponse<List<Product>>> {
-        val url = Constants().productUrl + "/search?query=" + query
+        val url = Constants.productUrl() + "/search?query=" + query
         return httpService.get(url)
     }
 }

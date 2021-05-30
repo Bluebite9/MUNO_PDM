@@ -19,6 +19,7 @@ import ro.pdm.muno_pdm.account.service.AccountService
 import ro.pdm.muno_pdm.utils.http.MunoResponse
 import ro.pdm.muno_pdm.utils.session.MunoDatabaseObject
 import ro.pdm.muno_pdm.utils.session.SessionService
+import ro.pdm.muno_pdm.utils.shared.Constants
 
 
 class LoginFragment : Fragment() {
@@ -72,6 +73,10 @@ class LoginFragment : Fragment() {
 
                 viewLifecycleOwner.lifecycleScope.launch {
                     // api call
+                    println("------------ LOGIN -----------")
+//                    println(Constants.ip)
+//                    println(Constants.baseUrl)
+//                    println(Constants.accountUrl)
                     val munoResponse : MunoResponse<AuthResponse> = accountService.login(authRequest).await()
 
                     // if error -> popup with error message

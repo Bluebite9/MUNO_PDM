@@ -4,11 +4,14 @@ package ro.pdm.muno_pdm.utils.shared
  * Constants for the url and paths (the list can be extended)
  */
 class Constants {
-    private val baseUrl: String = "http://172.26.16.1:8080"
+    companion object {
+        var ip: String = "172.26.16.1"
+        const val countyUrl: String = "https://roloca.coldfuse.io/judete"
+        const val cityUrl: String = "https://roloca.coldfuse.io/orase"
 
-    val accountUrl: String = "$baseUrl/rest/authenticate"
-    val userUrl: String = "$baseUrl/rest/users"
-    val productUrl: String = "$baseUrl/rest/product"
-    val countyUrl: String = "https://roloca.coldfuse.io/judete"
-    val cityUrl: String = "https://roloca.coldfuse.io/orase"
+        private fun baseUrl() = "http://$ip:8080"
+        fun accountUrl() = "${baseUrl()}/rest/authenticate"
+        fun userUrl() = "${baseUrl()}/rest/users"
+        fun productUrl() = "${baseUrl()}/rest/product"
+    }
 }

@@ -14,22 +14,21 @@ import ro.pdm.muno_pdm.utils.http.MunoResponse
 class AccountService {
 
     private val httpService = HttpService()
-    private val constants = Constants()
 
     fun login(authRequest: AuthRequest): Deferred<MunoResponse<AuthResponse>> {
-        return httpService.post(constants.accountUrl, authRequest)
+        return httpService.post(Constants.accountUrl(), authRequest)
     }
 
     fun getUserById(id: Long, token: String): Deferred<MunoResponse<User>> {
-        return httpService.get(constants.userUrl + "/$id", token)
+        return httpService.get(Constants.userUrl() + "/$id", token)
     }
 
     fun register(user: User): Deferred<MunoResponse<AuthResponse>> {
-        return httpService.post(constants.userUrl + "/add", user)
+        return httpService.post(Constants.userUrl() + "/add", user)
     }
 
     fun editUser(user: User, token: String): Deferred<MunoResponse<Any>> {
-        return httpService.put(constants.userUrl + "/updateUser", user, token)
+        return httpService.put(Constants.userUrl() + "/updateUser", user, token)
     }
 
 }

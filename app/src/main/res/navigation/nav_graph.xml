@@ -49,4 +49,9 @@
         android:name="ro.pdm.muno_pdm.account.fragments.CreateAccountFragment"
         android:label="@string/create_account_fragment_label"
         tools:layout="@layout/fragment_create_account" />
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="ro.pdm.muno_pdm.settings.fragments.SettingsFragment"
+        android:label="@string/settings_fragment_label"
+        tools:layout="@layout/fragment_settings" />
 </navigation>
