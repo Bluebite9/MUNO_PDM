@@ -43,7 +43,7 @@ class CreateProductFragment : Fragment() {
                 val product = Product()
                 product.name = nameEt.text.toString().trim()
                 product.description = descriptionEt.text.toString().trim()
-                product.price = priceEt.text.toString().toFloat().trim()
+                product.price = priceEt.text.toString().toFloat()
                 product.unit = unitEt.text.toString().trim()
 
                 val munoValidateResoponse = Validators().validateProduct(product)
