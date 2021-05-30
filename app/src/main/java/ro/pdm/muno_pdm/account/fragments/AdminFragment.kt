@@ -16,10 +16,6 @@ import ro.pdm.muno_pdm.account.adaptor.AdminAdaptor
 import ro.pdm.muno_pdm.account.models.User
 import ro.pdm.muno_pdm.account.service.AccountService
 import ro.pdm.muno_pdm.account.viewModel.AdminViewModel
-import ro.pdm.muno_pdm.product.adaptor.MyProductsAdaptor
-import ro.pdm.muno_pdm.product.models.Product
-import ro.pdm.muno_pdm.product.service.ProductService
-import ro.pdm.muno_pdm.product.viewModel.MyProductsViewModel
 import ro.pdm.muno_pdm.utils.http.MunoResponse
 import ro.pdm.muno_pdm.utils.session.SessionService
 
@@ -60,12 +56,9 @@ class AdminFragment : Fragment() {
             viewModel.userList = munoResponse?.value
             recyclerView.adapter = AdminAdaptor(
                 viewModel.userList as MutableList<User>?,
-                viewLifecycleOwner,
                 requireActivity().application
             )
             recyclerView.layoutManager = LinearLayoutManager(activity)
-
-
         }
     }
 }

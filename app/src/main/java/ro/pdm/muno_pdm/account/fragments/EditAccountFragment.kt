@@ -15,6 +15,7 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
 import kotlinx.coroutines.launch
@@ -254,13 +255,14 @@ class EditAccountFragment : Fragment(), OnMapReadyCallback {
         if (list.size > 0) {
             val address = list[0]
             println("geoLocate: found a location: $address")
-
-            val boundsBuilder = LatLngBounds.Builder()
             val latLng = LatLng(address.latitude, address.longitude)
-            boundsBuilder.include(latLng)
+            val cameraPosition = CameraPosition.Builder()
+                .target(latLng)
+                .zoom(12F)
+                .build()
 
             mapView.getMapAsync {
-                it.animateCamera(CameraUpdateFactory.newLatLngBounds(boundsBuilder.build(), 5))
+                it.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
             }
         }
     }

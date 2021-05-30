@@ -129,10 +129,7 @@ class LoginFragment : Fragment() {
             navigationView.menu.findItem(R.id.viewAccountFragment).isVisible = true
             navigationView.menu.findItem(R.id.loginFragment).isVisible = false
             navigationView.menu.findItem(R.id.createAccountFragment).isVisible = false
-
-            if(role != "ROLE_ADMIN") {
-                navigationView.menu.findItem(R.id.adminFragment).isVisible = false
-            }
+            navigationView.menu.findItem(R.id.adminFragment).isVisible = role == "ROLE_ADMIN"
         }
     }
 }

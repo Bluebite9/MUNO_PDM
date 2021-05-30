@@ -18,6 +18,7 @@ import kotlinx.coroutines.launch
 import ro.pdm.muno_pdm.account.service.AccountService
 import ro.pdm.muno_pdm.utils.session.SessionService
 import ro.pdm.muno_pdm.utils.shared.Constants
+import java.lang.Exception
 
 
 class MainActivity : AppCompatActivity() {
@@ -63,6 +64,14 @@ class MainActivity : AppCompatActivity() {
         }
 
         lifecycleScope.launch {
+            val munoDatabaseObject = SessionService(application).get("ip").await()
+
+            if (munoDatabaseObject != null) {
+                if (munoDatabaseObject.value != null) {
+                    Constants.ip = munoDatabaseObject.value!!
+                }
+            }
+
             // if user is not logged in
             val userIdMunoDatabaseObject = SessionService(application).get("id").await()
             val userTokenMunoDatabaseObject = SessionService(application).get("token").await()
@@ -75,22 +84,29 @@ class MainActivity : AppCompatActivity() {
             }
             // if user is logged in
             else {
-                val munoResponse =
-                    accountService.getUserById(
-                        userIdMunoDatabaseObject.value?.toLong()!!,
-                        userTokenMunoDatabaseObject.value!!
-                    ).await()
+                try {
+                    val munoResponse =
+                        accountService.getUserById(
+                            userIdMunoDatabaseObject.value?.toLong()!!,
+                            userTokenMunoDatabaseObject.value!!
+                        ).await()
 
-                if (munoResponse.errorMessage != null) {
+                    if (munoResponse.errorMessage != null) {
+                        AlertDialog.Builder(this@MainActivity).setTitle("Atentie!")
+                            .setMessage(munoResponse.errorMessage)
+                            .setPositiveButton("OK", null)
+                            .create()
+                            .show()
+                    } else {
+                        navigationView.menu.findItem(R.id.adminFragment).isVisible =
+                            munoResponse.value?.role == "ROLE_ADMIN"
+                    }
+                } catch (e: Exception) {
                     AlertDialog.Builder(this@MainActivity).setTitle("Atentie!")
-                        .setMessage(munoResponse.errorMessage)
+                        .setMessage("Nu s-a putut obtine userul curent de pe server")
                         .setPositiveButton("OK", null)
                         .create()
                         .show()
-                } else {
-                    if (munoResponse.value?.role != "ROLE_ADMIN") {
-                        navigationView.menu.findItem(R.id.adminFragment).isVisible = false
-                    }
                 }
 
                 navigationView.menu.findItem(R.id.loginFragment).isVisible = false
@@ -101,14 +117,6 @@ class MainActivity : AppCompatActivity() {
                 graph.startDestination = R.id.searchFragment
 
                 navController.graph = graph
-            }
-
-            val munoDatabaseObject = SessionService(application).get("ip").await()
-
-            if (munoDatabaseObject != null) {
-                if (munoDatabaseObject.value != null) {
-                    Constants.ip = munoDatabaseObject.value!!
-                }
             }
         }
     }

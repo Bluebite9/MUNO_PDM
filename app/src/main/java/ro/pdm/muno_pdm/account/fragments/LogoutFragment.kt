@@ -47,6 +47,7 @@ class LogoutFragment : Fragment() {
             navigationView.menu.findItem(R.id.viewProductListFragment).isVisible = false
             navigationView.menu.findItem(R.id.viewAccountFragment).isVisible = false
             navigationView.menu.findItem(R.id.logoutFragment).isVisible = false
+            navigationView.menu.findItem(R.id.adminFragment).isVisible = false
             navigationView.menu.findItem(R.id.loginFragment).isVisible = true
             navigationView.menu.findItem(R.id.createAccountFragment).isVisible = true
         }
