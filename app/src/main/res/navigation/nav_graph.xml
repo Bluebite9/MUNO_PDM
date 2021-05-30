@@ -55,6 +55,11 @@
         android:label="@string/settings_fragment_label"
         tools:layout="@layout/fragment_settings" />
     <fragment
+        android:id="@+id/adminFragment"
+        android:name="ro.pdm.muno_pdm.account.fragments.AdminFragment"
+        android:label="fragment_admin"
+        tools:layout="@layout/fragment_admin" />
+    <fragment
         android:id="@+id/logoutFragment"
         android:name="ro.pdm.muno_pdm.account.fragments.LogoutFragment"
         android:label="@string/logout_fragment_label"

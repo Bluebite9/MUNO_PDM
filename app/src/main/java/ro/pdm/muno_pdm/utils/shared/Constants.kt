@@ -5,7 +5,7 @@ package ro.pdm.muno_pdm.utils.shared
  */
 class Constants {
     companion object {
-        var ip: String = "172.26.16.1"
+        var ip: String = "192.168.0.151"
         const val countyUrl: String = "https://roloca.coldfuse.io/judete"
         const val cityUrl: String = "https://roloca.coldfuse.io/orase"
 

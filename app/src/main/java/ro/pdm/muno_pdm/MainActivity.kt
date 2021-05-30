@@ -1,5 +1,6 @@
 package ro.pdm.muno_pdm
 
+import android.app.AlertDialog
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -14,6 +15,7 @@ import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
 import kotlinx.coroutines.launch
+import ro.pdm.muno_pdm.account.service.AccountService
 import ro.pdm.muno_pdm.utils.session.SessionService
 import ro.pdm.muno_pdm.utils.shared.Constants
 
@@ -26,6 +28,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var navController: NavController
     lateinit var collapsingToolbarLayout: CollapsingToolbarLayout
     lateinit var fab: FloatingActionButton
+    val accountService = AccountService()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,6 +65,8 @@ class MainActivity : AppCompatActivity() {
         lifecycleScope.launch {
             // if user is not logged in
             val userIdMunoDatabaseObject = SessionService(application).get("id").await()
+            val userTokenMunoDatabaseObject = SessionService(application).get("token").await()
+
             if (userIdMunoDatabaseObject == null) {
                 navigationView.menu.findItem(R.id.createProductFragment).isVisible = false
                 navigationView.menu.findItem(R.id.viewProductListFragment).isVisible = false
@@ -70,6 +75,24 @@ class MainActivity : AppCompatActivity() {
             }
             // if user is logged in
             else {
+                val munoResponse =
+                    accountService.getUserById(
+                        userIdMunoDatabaseObject.value?.toLong()!!,
+                        userTokenMunoDatabaseObject.value!!
+                    ).await()
+
+                if (munoResponse.errorMessage != null) {
+                    AlertDialog.Builder(this@MainActivity).setTitle("Atentie!")
+                        .setMessage(munoResponse.errorMessage)
+                        .setPositiveButton("OK", null)
+                        .create()
+                        .show()
+                } else {
+                    if (munoResponse.value?.role != "ROLE_ADMIN") {
+                        navigationView.menu.findItem(R.id.adminFragment).isVisible = false
+                    }
+                }
+
                 navigationView.menu.findItem(R.id.loginFragment).isVisible = false
                 navigationView.menu.findItem(R.id.createAccountFragment).isVisible = false
 

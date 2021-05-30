@@ -4,6 +4,7 @@ import kotlinx.coroutines.Deferred
 import ro.pdm.muno_pdm.account.models.AuthRequest
 import ro.pdm.muno_pdm.account.models.AuthResponse
 import ro.pdm.muno_pdm.account.models.User
+import ro.pdm.muno_pdm.product.models.Product
 import ro.pdm.muno_pdm.utils.shared.Constants
 import ro.pdm.muno_pdm.utils.http.HttpService
 import ro.pdm.muno_pdm.utils.http.MunoResponse
@@ -29,6 +30,10 @@ class AccountService {
 
     fun editUser(user: User, token: String): Deferred<MunoResponse<Any>> {
         return httpService.put(Constants.userUrl() + "/updateUser", user, token)
+    }
+
+    fun getUserList(token: String): Deferred<MunoResponse<List<User>>> {
+        return httpService.get(Constants.userUrl(), token);
     }
 
 }

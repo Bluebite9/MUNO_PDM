@@ -102,7 +102,7 @@ class LoginFragment : Fragment() {
                         tokenMunoDatabaseObject.value = munoResponse.value?.token
                         SessionService(requireActivity().application).insert(tokenMunoDatabaseObject)
 
-                        changeNavigationContext()
+                        changeNavigationContext(munoResponse.value?.user?.role!!)
 
                         // set the start page & automatically go to it
                         val inflater = findNavController().navInflater
@@ -120,7 +120,7 @@ class LoginFragment : Fragment() {
      * When user logs in, change the items in the lateral menu so he can create an add, view his/her
      * adds or view his/hers account details & cannot login again or create an account
      */
-    private fun changeNavigationContext() {
+    private fun changeNavigationContext(role: String) {
         val navigationView : NavigationView? = activity?.findViewById(R.id.nav_view)
         if (navigationView != null) {
             navigationView.menu.findItem(R.id.createProductFragment).isVisible = true
@@ -129,6 +129,10 @@ class LoginFragment : Fragment() {
             navigationView.menu.findItem(R.id.viewAccountFragment).isVisible = true
             navigationView.menu.findItem(R.id.loginFragment).isVisible = false
             navigationView.menu.findItem(R.id.createAccountFragment).isVisible = false
+
+            if(role != "ROLE_ADMIN") {
+                navigationView.menu.findItem(R.id.adminFragment).isVisible = false
+            }
         }
     }
 }
