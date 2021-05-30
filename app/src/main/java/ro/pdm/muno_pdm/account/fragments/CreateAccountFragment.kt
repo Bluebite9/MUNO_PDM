@@ -155,22 +155,18 @@ class CreateAccountFragment : Fragment(), OnMapReadyCallback {
         registerBt.setOnClickListener {
             val user = User()
             //user is populated
-            user.email = emailEt.text.toString()
-            user.password = passwordEt.text.toString()
-            user.phone = phoneEt.text.toString()
-            user.firstName = firstNameEt.text.toString()
-            user.lastName = lastNameEt.text.toString()
-            user.city = citySpinner.selectedItem.toString()
-            user.county = countySpinner.selectedItem.toString()
+            user.email = emailEt.text.toString().trim()
+            user.password = passwordEt.text.toString().trim()
+            user.phone = phoneEt.text.toString().trim()
+            user.firstName = firstNameEt.text.toString().trim()
+            user.lastName = lastNameEt.text.toString().trim()
+            user.city = citySpinner.selectedItem.toString().trim()
+            user.county = countySpinner.selectedItem.toString().trim()
 
             viewLifecycleOwner.lifecycleScope.launch {
                 //user input is validated
 
                 val munoValidateResoponse = Validators().validateUser(user)
-
-                println("------------ VALIDATE USER ------------")
-                println(munoValidateResoponse.isValid)
-                println(munoValidateResoponse.message)
 
                 if (!munoValidateResoponse.isValid) {
                     AlertDialog.Builder(context).setTitle("Atentie!")
