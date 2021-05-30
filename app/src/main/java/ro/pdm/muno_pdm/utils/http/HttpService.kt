@@ -26,17 +26,22 @@ class HttpService {
                 builder.addHeader("Authorization", "Bearer $token")
             }
 
-            val request = builder.build()
-            val response = client.newCall(request).execute()
-            val responseBody = response.body!!.string()
             val munoResponse: MunoResponse<T> = MunoResponse()
-
+            val responseBody: String
             try {
-                munoResponse.value = Json.decodeFromString(responseBody)
-            } catch (e: Exception) {
-                println("----------------- GET EXCEPTION -------------------")
-                println(e.localizedMessage)
-                munoResponse.errorMessage = responseBody
+                val request = builder.build()
+                val response = client.newCall(request).execute()
+                responseBody = response.body!!.string()
+
+                try {
+                    munoResponse.value = Json.decodeFromString(responseBody)
+                } catch (e: Exception) {
+                    println("----------------- GET EXCEPTION -------------------")
+                    println(e.localizedMessage)
+                    munoResponse.errorMessage = responseBody
+                }
+            } catch (e: java.lang.Exception) {
+                munoResponse.errorMessage = "Nu s-a putut face legatura cu serverul. Verificati IP-ul din setari"
             }
 
             return@async munoResponse
@@ -58,17 +63,22 @@ class HttpService {
                 builder.addHeader("Authorization", "Bearer $token")
             }
 
-            val request = builder.build()
-            val response = client.newCall(request).execute()
-            val responseBody = response.body!!.string()
             val munoResponse: MunoResponse<T> = MunoResponse()
-
+            val responseBody: String
             try {
-                munoResponse.value = Json.decodeFromString(responseBody)
-            } catch (e: Exception) {
-                println("----------------- POST EXCEPTION -------------------")
-                println(e.localizedMessage)
-                munoResponse.errorMessage = responseBody
+                val request = builder.build()
+                val response = client.newCall(request).execute()
+                responseBody = response.body!!.string()
+
+                try {
+                    munoResponse.value = Json.decodeFromString(responseBody)
+                } catch (e: Exception) {
+                    println("----------------- POST EXCEPTION -------------------")
+                    println(e.localizedMessage)
+                    munoResponse.errorMessage = responseBody
+                }
+            } catch (e: java.lang.Exception) {
+                munoResponse.errorMessage = "Nu s-a putut face legatura cu serverul. Verificati IP-ul din setari"
             }
 
             return@async munoResponse
@@ -87,17 +97,23 @@ class HttpService {
                 .addHeader("Authorization", "Bearer $token")
                 .put(jsonBody)
 
-            val request = builder.build()
-            val response = client.newCall(request).execute()
-            val responseBody = response.body!!.string()
             val munoResponse: MunoResponse<T> = MunoResponse()
+            val responseBody: String
 
             try {
-                munoResponse.value = Json { ignoreUnknownKeys = true }.decodeFromString(responseBody)
-            } catch (e: Exception) {
-                println("----------------- PUT EXCEPTION -------------------")
-                println(e.localizedMessage)
-                munoResponse.errorMessage = responseBody
+                val request = builder.build()
+                val response = client.newCall(request).execute()
+                responseBody = response.body!!.string()
+
+                try {
+                    munoResponse.value = Json { ignoreUnknownKeys = true }.decodeFromString(responseBody)
+                } catch (e: Exception) {
+                    println("----------------- PUT EXCEPTION -------------------")
+                    println(e.localizedMessage)
+                    munoResponse.errorMessage = responseBody
+                }
+            } catch (e: java.lang.Exception) {
+                munoResponse.errorMessage = "Nu s-a putut face legatura cu serverul. Verificati IP-ul din setari"
             }
 
             return@async munoResponse
@@ -112,17 +128,23 @@ class HttpService {
                 .addHeader("Authorization", "Bearer $token")
                 .delete()
 
-            val request = builder.build()
-            val response = client.newCall(request).execute()
-            val responseBody = response.body!!.string()
             val munoResponse: MunoResponse<T> = MunoResponse()
+            val responseBody: String
 
             try {
-                munoResponse.value = Json { ignoreUnknownKeys = true }.decodeFromString(responseBody)
-            } catch (e: Exception) {
-                println("----------------- DELETE EXCEPTION -------------------")
-                println(e.localizedMessage)
-                munoResponse.errorMessage = responseBody
+                val request = builder.build()
+                val response = client.newCall(request).execute()
+                responseBody = response.body!!.string()
+
+                try {
+                    munoResponse.value = Json { ignoreUnknownKeys = true }.decodeFromString(responseBody)
+                } catch (e: Exception) {
+                    println("----------------- DELETE EXCEPTION -------------------")
+                    println(e.localizedMessage)
+                    munoResponse.errorMessage = responseBody
+                }
+            } catch (e: java.lang.Exception) {
+                munoResponse.errorMessage = "Nu s-a putut face legatura cu serverul. Verificati IP-ul din setari"
             }
 
             return@async munoResponse
