@@ -48,47 +48,47 @@ class Validators {
         }
 
         val regex =
-            Regex(pattern = "^(?=.[a-z])(?=.[A-Z])(?=.\\d)(?=.[@$!%?&])[A-Za-z\\d@$!%?&]{8,}$")
+            Regex(pattern = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}\$")
         return regex.containsMatchIn(input = password);
     }
 
     fun validateUser(user: User): MunoValidateResponse {
         val munoValidateResponse = MunoValidateResponse()
         if (!isNameValid(user.firstName)) {
-            munoValidateResponse.message = "Prenumele trebuie completat"
+            munoValidateResponse.message = "Prenumele este invalid."
             return munoValidateResponse
         }
 
         if (!isNameValid(user.lastName)) {
-            munoValidateResponse.message = "Numele trebuie completat"
+            munoValidateResponse.message = "Numele este invalid."
             return munoValidateResponse
         }
 
         if (!isEmailValid(user.email)) {
-            munoValidateResponse.message = "Emailul trebuie completat"
+            munoValidateResponse.message = "Emailul este invalid."
             return munoValidateResponse
         }
 
         if (!isPhoneValid(user.phone)) {
-            munoValidateResponse.message = "Telefonul trebuie completat"
+            munoValidateResponse.message = "Telefonul este invalid."
             return munoValidateResponse
         }
 
         if (!isPasswordValid(user.password)) {
-            munoValidateResponse.message = "Parola trebuie completat"
+            munoValidateResponse.message = "Parola este invalida."
             return munoValidateResponse
         }
 
-        if (!isNameValid(user.county)) {
-            munoValidateResponse.message = "Judetul trebuie completat"
+        if (user.county == null) {
+            munoValidateResponse.message = "Judetul este invalid."
             return munoValidateResponse
         }
 
-        if (!isNameValid(user.city)) {
-            munoValidateResponse.message = "Orasul trebuie completat"
+        if (user.city == null) {
+            munoValidateResponse.message = "Orasul este invalid."
             return munoValidateResponse
         }
-
+        munoValidateResponse.isValid = true;
         return munoValidateResponse
     }
 
@@ -97,17 +97,17 @@ class Validators {
         val munoValidateResponse = MunoValidateResponse()
 
         if (!isNameValid(product.name)) {
-            munoValidateResponse.message = "Numele trebuie completat"
+            munoValidateResponse.message = "Numele este invalid."
             return munoValidateResponse
         }
 
         if (!isDescriptionValid(product.description)) {
-            munoValidateResponse.message = "Descrierea trebuie completata"
+            munoValidateResponse.message = "Descrierea este invalida."
             return munoValidateResponse
         }
 
         if (product.price == null) {
-            munoValidateResponse.message = "Pretul trebuie completat"
+            munoValidateResponse.message = "Pretul este invalid."
             return munoValidateResponse
         }
 

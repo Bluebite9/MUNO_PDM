@@ -45,7 +45,7 @@ class CreateAccountFragment : Fragment(), OnMapReadyCallback {
         return inflater.inflate(R.layout.fragment_create_account, container, false)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?)  {
         super.onViewCreated(view, savedInstanceState)
 
         val emailEt: EditText = view.findViewById(R.id.emailEt)
@@ -168,6 +168,24 @@ class CreateAccountFragment : Fragment(), OnMapReadyCallback {
 
                 val munoValidateResoponse = Validators().validateUser(user)
 
+                if(confirmPasswordEt.text.toString() != passwordEt.text.toString()) {
+                    AlertDialog.Builder(context).setTitle("Atentie!")
+                        .setMessage("parola nu este identica")
+                        .setPositiveButton("OK", null)
+                        .create()
+                        .show()
+
+                    return@launch
+                }
+                if (!munoValidateResoponse.isValid) {
+                    AlertDialog.Builder(context).setTitle("Atentie!")
+                        .setMessage(munoValidateResoponse.message)
+                        .setPositiveButton("OK", null)
+                        .create()
+                        .show()
+
+                    return@launch
+                }
                 if (!munoValidateResoponse.isValid) {
                     AlertDialog.Builder(context).setTitle("Atentie!")
                         .setMessage(munoValidateResoponse.message)
