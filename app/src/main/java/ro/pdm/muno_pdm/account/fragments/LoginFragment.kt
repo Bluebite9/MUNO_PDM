@@ -125,6 +125,7 @@ class LoginFragment : Fragment() {
         if (navigationView != null) {
             navigationView.menu.findItem(R.id.createProductFragment).isVisible = true
             navigationView.menu.findItem(R.id.viewProductListFragment).isVisible = true
+            navigationView.menu.findItem(R.id.logoutFragment).isVisible = true
             navigationView.menu.findItem(R.id.viewAccountFragment).isVisible = true
             navigationView.menu.findItem(R.id.loginFragment).isVisible = false
             navigationView.menu.findItem(R.id.createAccountFragment).isVisible = false

@@ -12,6 +12,7 @@
     <string name="view_product_list_fragment_label">Anunturile mele</string>
     <string name="search_fragment_label">Cauta produse</string>
     <string name="settings_fragment_label">Setari</string>
+    <string name="logout_fragment_label">Logout</string>
 
     <string name="next">Next</string>
     <string name="previous">Previous</string>

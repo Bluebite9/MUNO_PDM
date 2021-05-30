@@ -28,4 +28,12 @@ class SessionService(application: Application) {
         }
     }
 
+    fun delete(key: String): Deferred<Int> {
+        return GlobalScope.async {
+            val munoDatabaseObject = MunoDatabaseObject()
+            munoDatabaseObject.key = key
+            sessionDao.delete(munoDatabaseObject)
+        }
+    }
+
 }

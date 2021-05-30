@@ -7,6 +7,7 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.appbar.CollapsingToolbarLayout
@@ -58,11 +59,27 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        navigationView.menu.findItem(R.id.createProductFragment).isVisible = false
-        navigationView.menu.findItem(R.id.viewProductListFragment).isVisible = false
-        navigationView.menu.findItem(R.id.viewAccountFragment).isVisible = false
-
         lifecycleScope.launch {
+            // if user is not logged in
+            val userIdMunoDatabaseObject = SessionService(application).get("id").await()
+            if (userIdMunoDatabaseObject == null) {
+                navigationView.menu.findItem(R.id.createProductFragment).isVisible = false
+                navigationView.menu.findItem(R.id.viewProductListFragment).isVisible = false
+                navigationView.menu.findItem(R.id.viewAccountFragment).isVisible = false
+                navigationView.menu.findItem(R.id.logoutFragment).isVisible = false
+            }
+            // if user is logged in
+            else {
+                navigationView.menu.findItem(R.id.loginFragment).isVisible = false
+                navigationView.menu.findItem(R.id.createAccountFragment).isVisible = false
+
+                val inflater = navController.navInflater
+                val graph = inflater.inflate(R.navigation.nav_graph)
+                graph.startDestination = R.id.searchFragment
+
+                navController.graph = graph
+            }
+
             val munoDatabaseObject = SessionService(application).get("ip").await()
 
             if (munoDatabaseObject != null) {
