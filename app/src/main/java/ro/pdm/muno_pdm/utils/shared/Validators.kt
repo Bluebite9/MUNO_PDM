@@ -88,7 +88,8 @@ class Validators {
             munoValidateResponse.message = "Orasul este invalid."
             return munoValidateResponse
         }
-        munoValidateResponse.isValid = true;
+
+        munoValidateResponse.isValid = true
         return munoValidateResponse
     }
 
@@ -116,6 +117,7 @@ class Validators {
             return munoValidateResponse
         }
 
+        munoValidateResponse.isValid = true
         return munoValidateResponse
     }
 }
