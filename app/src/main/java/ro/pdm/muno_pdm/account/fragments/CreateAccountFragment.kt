@@ -153,77 +153,70 @@ class CreateAccountFragment : Fragment(), OnMapReadyCallback {
         }
 
         registerBt.setOnClickListener {
+            val user = User()
+            //user is populated
+            user.email = emailEt.text.toString()
+            user.password = passwordEt.text.toString()
+            user.phone = phoneEt.text.toString()
+            user.firstName = firstNameEt.text.toString()
+            user.lastName = lastNameEt.text.toString()
+            user.city = citySpinner.selectedItem.toString()
+            user.county = countySpinner.selectedItem.toString()
 
-            // TODO validations!!!
+            viewLifecycleOwner.lifecycleScope.launch {
+                //user input is validated
 
-            if (emailEt.text != null && emailEt.text.toString().trim() != "" &&
-                passwordEt.text != null && passwordEt.text.toString().trim() != "" &&
-                confirmPasswordEt.text != null && confirmPasswordEt.text.toString().trim() != "" &&
-                phoneEt.text != null && phoneEt.text.toString().trim() != "" &&
-                firstNameEt.text != null && firstNameEt.text.toString().trim() != "" &&
-                lastNameEt.text != null && lastNameEt.text.toString().trim() != ""
-            ) {
-                val user = User()
-                //user is populated
-                user.email = emailEt.text.toString()
-                user.password = passwordEt.text.toString()
-                user.phone = phoneEt.text.toString()
-                user.firstName = firstNameEt.text.toString()
-                user.lastName = lastNameEt.text.toString()
-                user.city = citySpinner.selectedItem.toString()
-                user.county = countySpinner.selectedItem.toString()
+                val munoValidateResoponse = Validators().validateUser(user)
 
-                viewLifecycleOwner.lifecycleScope.launch {
-                    //user input is validated
+                println("------------ VALIDATE USER ------------")
+                println(munoValidateResoponse.isValid)
+                println(munoValidateResoponse.message)
 
-                    val munoValidateResoponse = Validators().validateUser(user)
+                if (!munoValidateResoponse.isValid) {
+                    AlertDialog.Builder(context).setTitle("Atentie!")
+                        .setMessage(munoValidateResoponse.message)
+                        .setPositiveButton("OK", null)
+                        .create()
+                        .show()
 
-                    if (!munoValidateResoponse.isValid) {
-                        AlertDialog.Builder(context).setTitle("Atentie!")
-                            .setMessage(munoValidateResoponse.message)
-                            .setPositiveButton("OK", null)
-                            .create()
-                            .show()
-
-                        return@launch
-                    }
-                    val munoResponse = accountService.register(user).await()
-
-                    if (munoResponse.errorMessage != null) {
-                        AlertDialog.Builder(context).setTitle("Atentie!")
-                            .setMessage(munoResponse.errorMessage)
-                            .setPositiveButton("OK", null)
-                            .create()
-                            .show()
-
-                        return@launch
-                    }
-
-                    val userIdMunoDatabaseObject = MunoDatabaseObject()
-                    // save user id
-                    userIdMunoDatabaseObject.key = "id"
-                    userIdMunoDatabaseObject.value = munoResponse.value?.user?.id.toString()
-                    SessionService(requireActivity().application).insert(userIdMunoDatabaseObject)
-
-                    println("------------- REGISTER --------------")
-                    println(munoResponse.value?.user?.id)
-                    println(munoResponse.value?.token)
-                    println(munoResponse.errorMessage)
-                    // save token
-                    val tokenMunoDatabaseObject = MunoDatabaseObject()
-                    tokenMunoDatabaseObject.key = "token"
-                    tokenMunoDatabaseObject.value = munoResponse.value?.token
-                    SessionService(requireActivity().application).insert(tokenMunoDatabaseObject)
-
-                    changeNavigationContext()
-
-                    // set the start page & automatically go to it
-                    val inflater = findNavController().navInflater
-                    val graph = inflater.inflate(R.navigation.nav_graph)
-                    graph.startDestination = R.id.searchFragment
-
-                    findNavController().graph = graph
+                    return@launch
                 }
+                val munoResponse = accountService.register(user).await()
+
+                if (munoResponse.errorMessage != null) {
+                    AlertDialog.Builder(context).setTitle("Atentie!")
+                        .setMessage(munoResponse.errorMessage)
+                        .setPositiveButton("OK", null)
+                        .create()
+                        .show()
+
+                    return@launch
+                }
+
+                val userIdMunoDatabaseObject = MunoDatabaseObject()
+                // save user id
+                userIdMunoDatabaseObject.key = "id"
+                userIdMunoDatabaseObject.value = munoResponse.value?.user?.id.toString()
+                SessionService(requireActivity().application).insert(userIdMunoDatabaseObject)
+
+                println("------------- REGISTER --------------")
+                println(munoResponse.value?.user?.id)
+                println(munoResponse.value?.token)
+                println(munoResponse.errorMessage)
+                // save token
+                val tokenMunoDatabaseObject = MunoDatabaseObject()
+                tokenMunoDatabaseObject.key = "token"
+                tokenMunoDatabaseObject.value = munoResponse.value?.token
+                SessionService(requireActivity().application).insert(tokenMunoDatabaseObject)
+
+                changeNavigationContext()
+
+                // set the start page & automatically go to it
+                val inflater = findNavController().navInflater
+                val graph = inflater.inflate(R.navigation.nav_graph)
+                graph.startDestination = R.id.searchFragment
+
+                findNavController().graph = graph
             }
         }
     }
